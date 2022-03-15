@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: exit 0
-  workflow-status:
+  assert-workflow-status:
     if: always()
     runs-on: ubuntu-latest
     needs:
