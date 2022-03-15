@@ -1,0 +1,33 @@
+name: Summarize Workflow Status Action
+description: Just summarize status of current workflow run from all completed job statuses.
+inputs:
+  github-token:
+    description: The GitHub token for use by actions/github-script
+    default: ${{ github.token }}
+    required: false
+outputs:
+  status:
+    description: Status of current workflow run. It will return one of "failure", "cancelled" and "success".
+    value: ${{ steps.github-script.outputs.result }}
+runs:
+  using: composite
+  steps:
+    - id: github-script
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{ inputs.github-token }}
+        script: |
+          const wfRunJobs = await github.rest.actions.listJobsForWorkflowRun({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            run_id: context.runId
+          })
+
+          const failedJobCount = wfRunJobs.data.jobs.filter((job) => (job.status === "completed" && job.conclusion === "failure")).length
+          if(failedJobCount >= 1) return "failure"
+
+          const cancelledJobCount = wfRunJobs.data.jobs.filter((job) => (job.status === "completed" && job.conclusion === "cancelled")).length
+          if(cancelledJobCount >= 1) return "cancelled"
+
+          return "success"
+        result-encoding: string
