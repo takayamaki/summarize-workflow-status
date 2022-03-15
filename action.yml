@@ -31,3 +31,6 @@ runs:
 
           return "success"
         result-encoding: string
+branding:
+  icon: info
+  color: green
