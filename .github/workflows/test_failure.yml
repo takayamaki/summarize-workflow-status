@@ -18,7 +18,7 @@ jobs:
       - failed-job
     steps:
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - id: workflow-status
         uses: ./
       - run: test ${{ steps.workflow-status.outputs.status }} = "failure"
