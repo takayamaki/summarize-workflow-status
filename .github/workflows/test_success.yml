@@ -18,7 +18,7 @@ jobs:
       - successed-job-2
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - id: workflow-status
         uses: ./
       - run: test ${{ steps.workflow-status.outputs.status }} = "success"
